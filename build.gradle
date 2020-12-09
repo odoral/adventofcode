@@ -1,0 +1,21 @@
+allprojects {
+
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'ch.qos.logback:logback-classic:1.2.3'
+        compileOnly 'org.projectlombok:lombok:1.18.16'
+
+        testImplementation group: 'junit', name: 'junit', version: '4.12'
+        testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    }
+    
+    wrapper {
+        gradleVersion = '6.7.1'
+        distributionType = Wrapper.DistributionType.BIN
+    }
+}

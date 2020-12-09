@@ -1,0 +1,5 @@
+rootProject.name = 'adventofcode'
+
+include 'common'
+include '2020:day7'
+include '2020:day8'
