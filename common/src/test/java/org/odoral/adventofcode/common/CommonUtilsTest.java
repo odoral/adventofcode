@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class CommonUtilsTest {
 
@@ -20,5 +21,12 @@ public class CommonUtilsTest {
         for (int i = 0; i < numbers.size(); i++) {
             assertEquals(new Integer(i+1), numbers.get(i));
         }
+    }
+    
+    @Test public void test_toCharacterArray(){
+        Character[] characters = CommonUtils.toCharacterArray("abc123ABC123");
+        assertEquals(12, characters.length);
+        Character[] expected = {'a', 'b', 'c', '1', '2', '3', 'A', 'B', 'C', '1', '2', '3'};
+        assertArrayEquals(expected, characters);
     }
 }

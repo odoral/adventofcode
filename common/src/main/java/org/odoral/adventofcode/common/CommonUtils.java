@@ -16,4 +16,14 @@ public class CommonUtils {
                 .collect(Collectors.toList());
         }
     }
+
+    public static Character[] toCharacterArray(String chain){
+        char[] chars = chain.toCharArray();
+        Character[] character = new Character[chars.length];
+        for (int i = 0; i < chars.length; i++) {
+            character[i] = chars[i];
+        }
+        return character;
+    }
+
 }
