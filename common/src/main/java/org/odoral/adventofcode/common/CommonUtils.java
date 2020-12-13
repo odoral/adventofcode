@@ -26,4 +26,22 @@ public class CommonUtils {
         return character;
     }
 
+    public static long lcm(List<Integer> rates) {
+        return rates.stream()
+            .map(Long::new)
+            .reduce(1L, CommonUtils::lcm);
+    }
+
+    public static long lcm(long a, long b) {
+        return (a * b) / gcf(a, b);
+    }
+
+    public static long gcf(long a, long b) {
+        if (b == 0) {
+            return a;
+        } else {
+            return gcf(b, a % b);
+        }
+    }
+    
 }
