@@ -8,6 +8,7 @@ allprojects {
 
     dependencies {
         implementation 'ch.qos.logback:logback-classic:1.2.3'
+        implementation 'org.apache.commons:commons-lang3:3.11'
         compileOnly 'org.projectlombok:lombok:1.18.16'
 
         testImplementation group: 'junit', name: 'junit', version: '4.12'
