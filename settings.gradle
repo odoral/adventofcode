@@ -2,6 +2,7 @@ rootProject.name = 'adventofcode'
 
 include 'common'
 include '2015:day1'
+include '2015:day2'
 
 include '2020:day1'
 include '2020:day2'
