@@ -8,3 +8,4 @@ bin
 .project
 gradlew
 gradlew.bat
+.settings
