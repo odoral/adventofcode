@@ -25,3 +25,5 @@ include '2020:day22'
 include '2020:day23'
 include '2020:day24'
 include '2020:day25'
+
+include '2021:day1'
