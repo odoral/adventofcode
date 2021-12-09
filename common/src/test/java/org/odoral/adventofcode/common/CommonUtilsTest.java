@@ -31,9 +31,13 @@ public class CommonUtilsTest {
     }
 
     @Test public void test_toIntegerArray(){
-        Integer[] integers = CommonUtils.toIntegerArray("123456789");
+        Integer[] integers = CommonUtils.toIntegerArray("123456789", "|");
         assertEquals(9, integers.length);
         Integer[] expected = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        assertArrayEquals(expected, integers);
+
+        integers = CommonUtils.toIntegerArray("1, 2, 3, 4, 5, 6, 7, 8, 9", ", ");
+        assertEquals(9, integers.length);
         assertArrayEquals(expected, integers);
     }
 }

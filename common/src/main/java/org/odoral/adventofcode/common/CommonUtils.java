@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,12 +30,14 @@ public class CommonUtils {
         return character;
     }
 
-    public static Integer[] toIntegerArray(String chain){
-        Integer[] numbers = new Integer[chain.length()];
-        for (int i = 0; i < chain.length(); i++) {
-            numbers[i] = Integer.valueOf(chain.substring(i, i + 1));
-        }
-        return numbers;
+    public static Integer[] toIntegerArray(String chain) {
+        return toIntegerArray(chain, "|");
+    }
+
+    public static Integer[] toIntegerArray(String numbers, String separator) {
+        return Arrays.stream(numbers.split(separator))
+            .map(Integer::parseInt)
+            .toArray(Integer[]::new);
     }
 
     public static long lcm(List<Integer> rates) {
