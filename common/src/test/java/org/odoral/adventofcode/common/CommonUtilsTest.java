@@ -29,4 +29,11 @@ public class CommonUtilsTest {
         Character[] expected = {'a', 'b', 'c', '1', '2', '3', 'A', 'B', 'C', '1', '2', '3'};
         assertArrayEquals(expected, characters);
     }
+
+    @Test public void test_toIntegerArray(){
+        Integer[] integers = CommonUtils.toIntegerArray("123456789");
+        assertEquals(9, integers.length);
+        Integer[] expected = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        assertArrayEquals(expected, integers);
+    }
 }

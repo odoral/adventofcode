@@ -1,10 +1,8 @@
 package org.odoral.adventofcode.y2020.day14;
 
-import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.CommonUtils;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +49,7 @@ public class DockingData {
     protected String logicV1(Long memValue, String mask) {
         StringBuilder result = new StringBuilder();
 
-        String memBinaryValue = toBinary(memValue);
+        String memBinaryValue = CommonUtils.toBinary(memValue, 36);
         for (int i = 0; i < 36; i++) {
             char maskChar = mask.charAt(i);
             if(maskChar == '0' || maskChar == '1'){
@@ -64,19 +62,11 @@ public class DockingData {
         return result.toString();
     }
 
-    protected String toBinary(Long memValue) {
-        return StringUtils.leftPad(Long.toBinaryString(memValue), 36, '0');
-    }
-
     public long calculateSum(Map<Long, String> addresses){
         return addresses.values()
             .stream()
-            .mapToLong(this::fromBinary)
+            .mapToLong(CommonUtils::fromBinary)
             .sum();
-    }
-
-    protected Long fromBinary(String binaryNumber){
-        return new BigInteger(binaryNumber, 2).longValue();
     }
 
     public Map<Long, String> processInstructionsV2(List<Instruction> instructions) {
@@ -91,15 +81,15 @@ public class DockingData {
                 Long memoryValue = instruction.getMemoryValue();
                 List<Long> maskedAddresses = computeMaskedAddresses(address, currentMask);
                 for (Long maskedAddress : maskedAddresses) {
-                    result.put(maskedAddress, toBinary(memoryValue));
+                    result.put(maskedAddress, CommonUtils.toBinary(memoryValue, 36));
                 }
             }
         }
         return result;
     }
 
-    protected List<Long> computeMaskedAddresses(Integer address, String currentMask) {
-        String binaryAddress = toBinary(address.longValue());
+    protected static List<Long> computeMaskedAddresses(Integer address, String currentMask) {
+        String binaryAddress = CommonUtils.toBinary(address.longValue(), 36);
         List<StringBuilder> resultingAddresses = new ArrayList<>();
         resultingAddresses.add(new StringBuilder());
         for (int i = 0; i < currentMask.length(); i++) {
@@ -133,7 +123,7 @@ public class DockingData {
         
         return resultingAddresses.stream()
             .map(StringBuilder::toString)
-            .map(this::fromBinary)
+            .map(CommonUtils::fromBinary)
             .collect(Collectors.toList());
     }
 
