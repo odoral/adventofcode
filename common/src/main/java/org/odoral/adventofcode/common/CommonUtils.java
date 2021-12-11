@@ -1,11 +1,13 @@
 package org.odoral.adventofcode.common;
 
 import org.apache.commons.lang3.StringUtils;
+import org.odoral.adventofcode.common.model.ValuedPoint;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -64,5 +66,28 @@ public class CommonUtils {
 
     public static Long fromBinary(String binaryNumber){
         return new BigInteger(binaryNumber, 2).longValue();
+    }
+
+    public static <T> List<ValuedPoint<T>> findNeighbours(T[][] map, int rowIndex, int columnIndex) {
+        List<ValuedPoint<T>> neighbours = new ArrayList<>();
+        
+        // Up
+        if(rowIndex > 0){
+            neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex, map[rowIndex - 1][columnIndex]));
+        }
+        // Down
+        if(rowIndex < map.length - 1){
+            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex, map[rowIndex + 1] [columnIndex]));
+        }
+        // Left
+        if(columnIndex > 0){
+            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex - 1, map[rowIndex] [columnIndex - 1]));
+        }
+        // Right
+        if(columnIndex < map[rowIndex].length - 1){
+            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex + 1, map[rowIndex] [columnIndex + 1]));
+        }
+        
+        return neighbours;
     }
 }

@@ -23,4 +23,13 @@ public class Point {
     public int hashCode() {
         return Objects.hash(x, y);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Point{");
+        sb.append("x=").append(x);
+        sb.append(", y=").append(y);
+        sb.append('}');
+        return sb.toString();
+    }
 }
