@@ -68,26 +68,48 @@ public class CommonUtils {
         return new BigInteger(binaryNumber, 2).longValue();
     }
 
-    public static <T> List<ValuedPoint<T>> findNeighbours(T[][] map, int rowIndex, int columnIndex) {
+    public static <T> List<ValuedPoint<T>> findNeighbours(T[][] map, int rowIndex, int columnIndex, boolean considerDiagonal) {
         List<ValuedPoint<T>> neighbours = new ArrayList<>();
-        
+
         // Up
-        if(rowIndex > 0){
+        if (rowIndex > 0) {
             neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex, map[rowIndex - 1][columnIndex]));
         }
         // Down
-        if(rowIndex < map.length - 1){
-            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex, map[rowIndex + 1] [columnIndex]));
+        if (rowIndex < map.length - 1) {
+            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex, map[rowIndex + 1][columnIndex]));
         }
         // Left
-        if(columnIndex > 0){
-            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex - 1, map[rowIndex] [columnIndex - 1]));
+        if (columnIndex > 0) {
+            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex - 1, map[rowIndex][columnIndex - 1]));
         }
         // Right
-        if(columnIndex < map[rowIndex].length - 1){
-            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex + 1, map[rowIndex] [columnIndex + 1]));
+        if (columnIndex < map[rowIndex].length - 1) {
+            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex + 1, map[rowIndex][columnIndex + 1]));
         }
-        
+
+        if (considerDiagonal) {
+            // Top left corner
+            if (rowIndex > 0 && columnIndex > 0) {
+                neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex - 1, map[rowIndex - 1][columnIndex - 1]));
+            }
+
+            // Top right corner
+            if (rowIndex > 0 && columnIndex < map[rowIndex].length - 1) {
+                neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex + 1, map[rowIndex - 1][columnIndex + 1]));
+            }
+
+            // Bottom left corner
+            if (rowIndex < map.length - 1 && columnIndex > 0) {
+                neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex - 1, map[rowIndex + 1][columnIndex - 1]));
+            }
+
+            // Bottom right corner
+            if (rowIndex < map.length - 1 && columnIndex < map[rowIndex].length - 1) {
+                neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex + 1, map[rowIndex + 1][columnIndex + 1]));
+            }
+        }
+
         return neighbours;
     }
 }

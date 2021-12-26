@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':common')
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+}
