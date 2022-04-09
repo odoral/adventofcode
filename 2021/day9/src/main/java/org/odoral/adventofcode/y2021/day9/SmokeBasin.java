@@ -31,7 +31,7 @@ public class SmokeBasin {
         for (int rowIndex = 0; rowIndex < inputMap.length; rowIndex++) {
             for (int columnIndex = 0; columnIndex < inputMap[rowIndex].length; columnIndex++) {
                 final int currentValue = inputMap[rowIndex][columnIndex];
-                List<org.odoral.adventofcode.common.model.ValuedPoint<Integer>> neighbours = CommonUtils.findNeighbours(inputMap, rowIndex, columnIndex);
+                List<org.odoral.adventofcode.common.model.ValuedPoint<Integer>> neighbours = CommonUtils.findNeighbours(inputMap, rowIndex, columnIndex, false);
                 if(neighbours.stream().noneMatch(n -> n.value <= currentValue)){
                     log.debug("Found lower point at {},{} = {}", rowIndex, columnIndex, currentValue);
                     lowerPoints.add(new ValuedPoint<>(rowIndex, columnIndex, currentValue));
@@ -56,7 +56,7 @@ public class SmokeBasin {
 
     protected Set<ValuedPoint<Integer>> calculateBasin(Integer[][] inputMap, ValuedPoint<Integer> point, HashSet<ValuedPoint<Integer>> basinPoints) {
         basinPoints.add(point);
-        basinPoints.addAll(CommonUtils.findNeighbours(inputMap, point.x, point.y)
+        basinPoints.addAll(CommonUtils.findNeighbours(inputMap, point.x, point.y, false)
             .stream()
             .filter(neighbour -> !basinPoints.contains(neighbour))
             .filter(neighbour -> isValidBasinNeighbour(point, neighbour))
