@@ -39,7 +39,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: 7.3
-          arguments: clean test --info --continue
+          arguments: clean test codeCoverageReport --info --continue
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
