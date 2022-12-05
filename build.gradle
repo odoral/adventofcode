@@ -10,28 +10,6 @@ allprojects {
     }
 }
 
-task codeCoverageReport(type: JacocoReport) {
-
-    // Gather execution data from all subprojects
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    // Add all relevant source sets from the subprojects
-    subprojects.each {
-        sourceSets it.sourceSets.main
-    }
-
-    reports {
-        xml.enabled true
-        html.enabled true
-        csv.enabled false
-    }
-}
-
-// always run the tests before generating the report
-codeCoverageReport.dependsOn {
-    subprojects*.test
-}
-
 sonarqube {
     properties {
         property "sonar.projectKey", "odoral_adventofcode"
@@ -39,7 +17,7 @@ sonarqube {
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.java.source", "8"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${rootDir}/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${rootDir}/code-coverage-report/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
     }
 }
 
@@ -62,13 +40,18 @@ subprojects {
         testCompileOnly 'org.projectlombok:lombok:1.18.24'
     }
 
-    wrapper {
-        gradleVersion = '7.3'
-        distributionType = Wrapper.DistributionType.BIN
-    }
-
     jacoco {
-        toolVersion = "0.8.3"
+        toolVersion = "0.8.8"
     }
 
+    // Do not generate reports for individual projects
+    tasks.named("jacocoTestReport") {
+        enabled = false
+    }
+
+}
+
+wrapper {
+    gradleVersion = '7.6'
+    distributionType = Wrapper.DistributionType.BIN
 }
