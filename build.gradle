@@ -1,10 +1,31 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id "org.sonarqube" version "3.5.0.2730"
+}
+
 allprojects {
-
-    apply plugin: 'java'
-
     repositories {
         mavenCentral()
     }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "odoral_adventofcode"
+        property "sonar.organization", "odoral"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.java.source", "8"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${rootDir}/code-coverage-report/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'org.sonarqube'
 
     dependencies {
         implementation 'ch.qos.logback:logback-classic:1.3.5'
@@ -18,9 +39,19 @@ allprojects {
         testImplementation group: 'junit', name: 'junit', version: '4.13.2'
         testCompileOnly 'org.projectlombok:lombok:1.18.24'
     }
-    
-    wrapper {
-        gradleVersion = '7.3'
-        distributionType = Wrapper.DistributionType.BIN
+
+    jacoco {
+        toolVersion = "0.8.8"
     }
+
+    // Do not generate reports for individual projects
+    tasks.named("jacocoTestReport") {
+        enabled = false
+    }
+
+}
+
+wrapper {
+    gradleVersion = '7.6'
+    distributionType = Wrapper.DistributionType.BIN
 }
