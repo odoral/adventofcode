@@ -2,6 +2,7 @@ package org.odoral.adventofcode.y2021.day4;
 
 import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 
 import java.io.IOException;
 import java.util.*;
@@ -78,6 +79,9 @@ public class GiantSquid {
                 boards.add(currentBoard);
                 row = 0;
             } else {
+                if (Objects.isNull(currentBoard)) {
+                    throw new AdventOfCodeException("Board is not initialised");
+                }
                 currentBoard.boardNumbers[row++] = CommonUtils.toIntegerArray(StringUtils.normalizeSpace(line), " ");
             }
         }

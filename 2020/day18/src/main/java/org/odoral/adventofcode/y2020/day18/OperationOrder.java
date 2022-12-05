@@ -24,7 +24,7 @@ public class OperationOrder {
     }
 
     public List<String> loadInput(String resource) throws IOException {
-        return CommonUtils.loadResource(resource, line -> line.replaceAll(" ", ""));
+        return CommonUtils.loadResource(resource, line -> line.replaceAll("\\s", ""));
     }
 
     public long processOperations(List<String> operations, ToLongFunction<String> operationProcessor) {
@@ -40,21 +40,21 @@ public class OperationOrder {
         StringBuilder accNumber = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
-            if(Operation.isOperation(c)){
-                if(!accNumber.toString().isEmpty()) {
+            if (Operation.isOperation(c)) {
+                if (!accNumber.toString().isEmpty()) {
                     total = currentOperation.doOperation(total, Integer.parseInt(accNumber.toString()));
                     accNumber = new StringBuilder();
                 }
                 currentOperation = Operation.from(c);
-            }else if(c == '('){
+            } else if (c == '(') {
                 String subOperation = extractSubOperation(operation, i);
-                i+=subOperation.length() + 1;
+                i += subOperation.length() + 1;
                 long subtotal = processOperationPart1(subOperation);
                 total = currentOperation.doOperation(total, subtotal);
-            }else if(i == chars.length - 1){
+            } else if (i == chars.length - 1) {
                 accNumber.append(c);
                 total = currentOperation.doOperation(total, Integer.parseInt(accNumber.toString()));
-            }else{
+            } else {
                 accNumber.append(c);
             }
         }
@@ -64,24 +64,24 @@ public class OperationOrder {
     protected String extractSubOperation(String operation, int indexFrom) {
         int openedParenthesis = 1;
         int indexTo = indexFrom;
-        while(openedParenthesis != 0){
+        while (openedParenthesis != 0) {
             indexTo++;
-            if(operation.charAt(indexTo) == '('){
+            if (operation.charAt(indexTo) == '(') {
                 openedParenthesis++;
-            }else if(operation.charAt(indexTo) == ')'){
+            } else if (operation.charAt(indexTo) == ')') {
                 openedParenthesis--;
             }
         }
-        
+
         return operation.substring(indexFrom + 1, indexTo);
     }
 
     protected long processOperationPart2(String operation) {
-        while(operation.contains("+")) {
+        while (operation.contains("+")) {
             operation = processIsolatedSumOperations(operation);
             operation = processIsolatedMultOperations(operation);
         }
-        
+
         return processOperationPart1(operation);
     }
 
@@ -95,23 +95,23 @@ public class OperationOrder {
         return processPatternOperations(operation, compile);
     }
 
-    private String processPatternOperations(String operation, Pattern compile) {
+    protected String processPatternOperations(String operation, Pattern compile) {
         Matcher matcher = compile.matcher(operation);
         int position = 0;
         StringBuilder sb = new StringBuilder();
-        while(matcher.find()){
+        while (matcher.find()) {
             MatchResult matchResult = matcher.toMatchResult();
             sb.append(operation, position, matchResult.start());
             String group = matchResult.group();
             sb.append(processOperationPart1(group));
-            position=(matchResult.start()+group.length());
+            position = (matchResult.start() + group.length());
         }
         sb.append(operation.substring(position));
         operation = sb.toString();
         return operation;
     }
 
-    public enum Operation{
+    public enum Operation {
         SUM('+'),
         MULT('*');
 
@@ -120,30 +120,30 @@ public class OperationOrder {
         Operation(Character operation) {
             this.operation = operation;
         }
-        
-        public static boolean isOperation(char c){
+
+        public static boolean isOperation(char c) {
             return c == '+' || c == '*';
         }
-        
-        public static Operation from(char c){
-            switch (c){
+
+        public static Operation from(char c) {
+            switch (c) {
                 case '+':
                     return SUM;
                 case '*':
                     return MULT;
                 default:
-                    throw new UnsupportedOperationException("Unsupported operation: "+c);
+                    throw new UnsupportedOperationException("Unsupported operation: " + c);
             }
         }
 
-        public long doOperation(long number1, long number2){
-            switch (this){
+        public long doOperation(long number1, long number2) {
+            switch (this) {
                 case SUM:
                     return number1 + number2;
                 case MULT:
                     return number1 * number2;
                 default:
-                    throw new IllegalArgumentException("Unsupported operation: "+this);
+                    throw new IllegalArgumentException("Unsupported operation: " + this);
             }
         }
     }

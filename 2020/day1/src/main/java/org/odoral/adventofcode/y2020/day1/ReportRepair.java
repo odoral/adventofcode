@@ -12,27 +12,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReportRepair {
 
-    public static final int _2020 = 2020;
+    public static final int NUMBER_2020 = 2020;
 
     public static void main(String [] args) throws IOException {
         ReportRepair reportRepair = new ReportRepair();
         List<Integer> numbers = CommonUtils.loadResource("/input.txt", Integer::parseInt);
-        List<Result> numbersWhichSum = reportRepair.getTwoNumbersWhichSum(numbers, _2020);
+        List<Result> numbersWhichSum = reportRepair.getTwoNumbersWhichSum(numbers, NUMBER_2020);
         Result result = numbersWhichSum.get(0);
-        log.info("{} + {} = {} => result: {}", 
-            result.numbers[0], 
-            result.numbers[1], _2020, 
+        log.info("{} + {} = {} => result: {}",
+            result.numbers[0],
+            result.numbers[1], NUMBER_2020,
             result.getStream()
                 .mapToInt(i -> i)
                 .reduce((r, l) -> r * l));
-        
-        numbersWhichSum = reportRepair.getThreeNumbersWhichSum(numbers, _2020);
+
+        numbersWhichSum = reportRepair.getThreeNumbersWhichSum(numbers, NUMBER_2020);
         result = numbersWhichSum.get(0);
-        log.info("{} + {} + {} = {} => result: {}", 
-            result.numbers[0], 
-            result.numbers[1], 
-            result.numbers[2], 
-            _2020, 
+        log.info("{} + {} + {} = {} => result: {}",
+            result.numbers[0],
+            result.numbers[1],
+            result.numbers[2],
+            NUMBER_2020,
             result.getStream()
                 .mapToInt(i -> i)
                 .reduce((r, l) -> r * l)
@@ -72,7 +72,7 @@ public class ReportRepair {
         return results;
     }
     
-    public class Result{
+    public static class Result{
         final Integer [] numbers;
         
         public Result(Integer ... numbers) {

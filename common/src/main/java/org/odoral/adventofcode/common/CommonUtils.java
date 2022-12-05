@@ -10,20 +10,21 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CommonUtils {
-    
+
     public static <T> List<T> loadResource(String resource, Function<String, T> mapFunction) throws IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resource.getClass().getResourceAsStream(resource)))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resource.getClass().getResourceAsStream(resource))))) {
             return bufferedReader.lines()
                 .map(mapFunction)
                 .collect(Collectors.toList());
         }
     }
 
-    public static Character[] toCharacterArray(String chain){
+    public static Character[] toCharacterArray(String chain) {
         char[] chars = chain.toCharArray();
         Character[] character = new Character[chars.length];
         for (int i = 0; i < chars.length; i++) {
@@ -64,7 +65,7 @@ public class CommonUtils {
         return StringUtils.leftPad(Long.toBinaryString(memValue), zeroPadding, '0');
     }
 
-    public static Long fromBinary(String binaryNumber){
+    public static Long fromBinary(String binaryNumber) {
         return new BigInteger(binaryNumber, 2).longValue();
     }
 
@@ -89,27 +90,33 @@ public class CommonUtils {
         }
 
         if (considerDiagonal) {
-            // Top left corner
-            if (rowIndex > 0 && columnIndex > 0) {
-                neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex - 1, map[rowIndex - 1][columnIndex - 1]));
-            }
-
-            // Top right corner
-            if (rowIndex > 0 && columnIndex < map[rowIndex].length - 1) {
-                neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex + 1, map[rowIndex - 1][columnIndex + 1]));
-            }
-
-            // Bottom left corner
-            if (rowIndex < map.length - 1 && columnIndex > 0) {
-                neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex - 1, map[rowIndex + 1][columnIndex - 1]));
-            }
-
-            // Bottom right corner
-            if (rowIndex < map.length - 1 && columnIndex < map[rowIndex].length - 1) {
-                neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex + 1, map[rowIndex + 1][columnIndex + 1]));
-            }
+            neighbours.addAll(findDiagonalNeighbours(map, rowIndex, columnIndex));
         }
 
+        return neighbours;
+    }
+
+    public static <T> List<ValuedPoint<T>> findDiagonalNeighbours(T[][] map, int rowIndex, int columnIndex) {
+        List<ValuedPoint<T>> neighbours = new ArrayList<>();
+        // Top left corner
+        if (rowIndex > 0 && columnIndex > 0) {
+            neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex - 1, map[rowIndex - 1][columnIndex - 1]));
+        }
+
+        // Top right corner
+        if (rowIndex > 0 && columnIndex < map[rowIndex].length - 1) {
+            neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex + 1, map[rowIndex - 1][columnIndex + 1]));
+        }
+
+        // Bottom left corner
+        if (rowIndex < map.length - 1 && columnIndex > 0) {
+            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex - 1, map[rowIndex + 1][columnIndex - 1]));
+        }
+
+        // Bottom right corner
+        if (rowIndex < map.length - 1 && columnIndex < map[rowIndex].length - 1) {
+            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex + 1, map[rowIndex + 1][columnIndex + 1]));
+        }
         return neighbours;
     }
 }
