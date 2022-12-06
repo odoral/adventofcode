@@ -1,15 +1,16 @@
 package org.odoral.adventofcode.y2021.day12;
 
-import lombok.extern.slf4j.Slf4j;
 import org.odoral.adventofcode.common.CommonUtils;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PassagePathing {
@@ -19,10 +20,10 @@ public class PassagePathing {
     public static final Predicate<List<String>> PATH_IS_FINISHED = path -> !path.isEmpty() && END.equals(path.get(path.size() - 1));
     public static final String PATH_SEPARATOR = "-";
 
-    public static final BiFunction<List<String>, String, Boolean> SKIP_IF_SMALL_AND_ALREADY_IN_PATH = (path, cave) ->
+    public static final BiPredicate<List<String>, String> SKIP_IF_SMALL_AND_ALREADY_IN_PATH = (path, cave) ->
             !(isSmallCave(cave) && path.contains(cave));
 
-    public static final BiFunction<List<String>, String, Boolean> SKIP_IF_SMALL_AND_VISITED_TWICE_IN_PATH = (path, cave) -> {
+    public static final BiPredicate<List<String>, String> SKIP_IF_SMALL_AND_VISITED_TWICE_IN_PATH = (path, cave) -> {
         if (isSmallCave(cave)) {
             long visits = countVisits(path, cave);
             long maxSingleCaveVisits = countSingleCaveVisits(path);
@@ -51,7 +52,7 @@ public class PassagePathing {
         log.info("Found {} different paths.", result.paths.size());
     }
 
-    public Result calculatePaths(Map<String, Set<String>> caveMap, BiFunction<List<String>, String, Boolean> skipFunction) {
+    public Result calculatePaths(Map<String, Set<String>> caveMap, BiPredicate<List<String>, String> skipFunction) {
         List<List<String>> paths = calculatePaths(caveMap, new ArrayList<>(), START, skipFunction);
 
         return new Result(paths.stream()
@@ -61,7 +62,7 @@ public class PassagePathing {
                 .collect(Collectors.toList()));
     }
 
-    public List<List<String>> calculatePaths(Map<String, Set<String>> caveMap, List<String> accumulatedPath, String previousCave, BiFunction<List<String>, String, Boolean> skipFunction) {
+    public List<List<String>> calculatePaths(Map<String, Set<String>> caveMap, List<String> accumulatedPath, String previousCave, BiPredicate<List<String>, String> skipFunction) {
         if (PATH_IS_FINISHED.test(accumulatedPath)) {
             return Collections.singletonList(accumulatedPath);
         }
@@ -69,7 +70,7 @@ public class PassagePathing {
         Set<String> nextCaves = caveMap.get(previousCave);
 
         return nextCaves.stream()
-                .filter(nextCave -> skipFunction.apply(accumulatedPath, previousCave))
+                .filter(nextCave -> skipFunction.test(accumulatedPath, previousCave))
                 .flatMap(nextCave -> {
                     ArrayList<String> previousPath = new ArrayList<>(accumulatedPath);
                     previousPath.add(previousCave);

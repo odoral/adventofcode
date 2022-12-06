@@ -1,6 +1,5 @@
 package org.odoral.adventofcode.y2021.day11;
 
-import lombok.extern.slf4j.Slf4j;
 import org.odoral.adventofcode.common.CommonUtils;
 import org.odoral.adventofcode.common.model.Point;
 import org.odoral.adventofcode.common.model.ValuedPoint;
@@ -8,6 +7,8 @@ import org.odoral.adventofcode.common.model.ValuedPoint;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DumboOctopus {
@@ -88,10 +89,8 @@ public class DumboOctopus {
     public Result findStepAllOctopusesFlash(Integer[][] inputMap) {
         Result result = new Result(inputMap, 0, 0);
         Result lastStep;
-        int counter = 0;
         do {
             lastStep = processStep(result.inputMap);
-            counter++;
             result = result.add(lastStep);
         } while (lastStep.numberOfFlashes != inputMap.length * inputMap[0].length);
         return result;
