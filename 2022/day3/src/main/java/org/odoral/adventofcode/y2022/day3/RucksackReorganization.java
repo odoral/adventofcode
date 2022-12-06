@@ -80,9 +80,9 @@ public class RucksackReorganization {
 
     protected long calculatePriority(char itemOnBothCompartiments) {
         if (Character.isUpperCase(itemOnBothCompartiments)) {
-            return ((int) itemOnBothCompartiments) - ((int) 'A') + 27L;
+            return itemOnBothCompartiments - 'A' + 27L;
         } else {
-            return ((int) itemOnBothCompartiments) - ((int) 'a') + 1L;
+            return itemOnBothCompartiments - 'a' + 1L;
         }
     }
 

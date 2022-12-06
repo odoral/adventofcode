@@ -1,5 +1,6 @@
 package org.odoral.adventofcode.common;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.model.ValuedPoint;
 
@@ -27,12 +28,7 @@ public class CommonUtils {
     }
 
     public static Character[] toCharacterArray(String chain) {
-        char[] chars = chain.toCharArray();
-        Character[] character = new Character[chars.length];
-        for (int i = 0; i < chars.length; i++) {
-            character[i] = chars[i];
-        }
-        return character;
+        return ArrayUtils.toObject(chain.toCharArray());
     }
 
     public static Integer[] toIntegerArray(String chain) {
