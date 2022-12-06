@@ -1,5 +1,7 @@
 package org.odoral.adventofcode.y2021.day8;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.CommonUtils;
 
@@ -15,12 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SevenSegmentSearch {
 
-    public static final Map<Integer, Integer> SIGNALS_PER_NUMBER = new HashMap<Integer, Integer>() {{
-        put(1, 2);
-        put(4, 4);
-        put(7, 3);
-        put(8, 7);
-    }};
+    public static final Map<Integer, Integer> SIGNALS_PER_NUMBER = ImmutableMap.<Integer, Integer>builder()
+        .put(1, 2)
+        .put(4, 4)
+        .put(7, 3)
+        .put(8, 7)
+        .build();
 
     public static void main(String[] args) throws IOException {
         SevenSegmentSearch sevenSegmentSearch = new SevenSegmentSearch();
