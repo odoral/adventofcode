@@ -75,7 +75,7 @@ public class MonsterMessages {
         protected void loadNewRule(String line) {
             String [] fields = line.split(":");
             int ruleNumber = Integer.parseInt(fields[0]);
-            String rule = fields[1].trim().replaceAll("\"", "");
+            String rule = fields[1].trim().replace("\"", "");
             rules.put(ruleNumber, new DefaultRule(rules, rule, ruleNumber));
         }
 

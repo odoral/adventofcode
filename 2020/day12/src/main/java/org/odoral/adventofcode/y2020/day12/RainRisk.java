@@ -140,7 +140,9 @@ public class RainRisk {
                 r = new int[]{1, -1};
             }
             for (int i = 0; i < rotations; i++) {
-                result = new int[]{result[1] *= r[0], result[0] *= r[1]};
+                int finalWayPointX = result[1] * r[0];
+                int finalWayPointY = result[0] * r[1];
+                result = new int[]{finalWayPointX, finalWayPointY};
             }
         }
         return result;

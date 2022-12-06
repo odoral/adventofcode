@@ -5,7 +5,6 @@ import org.odoral.adventofcode.common.CommonUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -17,7 +16,7 @@ public class PasswordPhilosophy {
     public static void main(String [] args) throws IOException {
         PasswordPhilosophy passwordPhilosophy = new PasswordPhilosophy();
         List<String> passwords = passwordPhilosophy.loadPasswords("/input.txt");
-        int counter = passwordPhilosophy.countValidPasswordsForPolicy(passwords, passwordPhilosophy::isValidForFirstPolicy);
+        long counter = passwordPhilosophy.countValidPasswordsForPolicy(passwords, passwordPhilosophy::isValidForFirstPolicy);
         log.info("Matching passwords for first policy: {}", counter);
 
         counter = passwordPhilosophy.countValidPasswordsForPolicy(passwords, passwordPhilosophy::isValidForSecondPolicy);
@@ -28,14 +27,12 @@ public class PasswordPhilosophy {
         return CommonUtils.loadResource(resource, Function.identity());
     }
 
-    protected int countValidPasswordsForPolicy(List<String> passwords, Predicate<PasswordInfo> passwordPolicy) {
-        final AtomicInteger counter = new AtomicInteger(0);
-        passwords.stream()
+    protected long countValidPasswordsForPolicy(List<String> passwords, Predicate<PasswordInfo> passwordPolicy) {
+        return passwords.stream()
             .map(PasswordInfo::toPasswordInfo)
             .filter(passwordPolicy)
-            .peek(p -> counter.incrementAndGet())
-            .forEach(pass -> log.info("Valid password configuration: {}", pass));
-        return counter.get();
+            .peek(pass -> log.info("Valid password configuration: {}", pass))
+            .count();
     }
 
     public boolean isValidForFirstPolicy(PasswordInfo passwordInfo) {
