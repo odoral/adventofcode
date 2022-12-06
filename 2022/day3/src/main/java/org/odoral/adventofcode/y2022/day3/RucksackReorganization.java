@@ -1,6 +1,7 @@
 package org.odoral.adventofcode.y2022.day3;
 
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 
 import java.io.IOException;
 import java.util.*;
@@ -57,7 +58,7 @@ public class RucksackReorganization {
             }
         }
 
-        throw new RuntimeException(NOT_FOUND);
+        throw new AdventOfCodeException(NOT_FOUND);
     }
 
     protected long rucksackPriorityPart2(List<String> rucksacks) {
@@ -72,7 +73,7 @@ public class RucksackReorganization {
             .filter(e -> e.getValue() == 3)
             .findFirst()
             .map(Map.Entry::getKey)
-            .orElseThrow(() -> new RuntimeException(NOT_FOUND));
+            .orElseThrow(() -> new AdventOfCodeException(NOT_FOUND));
 
         return calculatePriority(itemOnThreeGroups);
     }

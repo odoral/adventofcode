@@ -30,7 +30,7 @@ public class SupplyStacksTest {
         SupplyStacks.Input input = supplyStacks.loadInput("/input.txt");
         SupplyStacks.Result result = supplyStacks.move(input.stacks, input.movements, supplyStacks.moveUsingCrateMover9000(input.stacks));
 
-        assertEquals("CMZ", result.result);
+        assertEquals("CMZ", result.cratesOnTop);
     }
 
     @Test public void test_scenario2() {
@@ -38,7 +38,7 @@ public class SupplyStacksTest {
         SupplyStacks.Input input = supplyStacks.loadInput("/input.txt");
         SupplyStacks.Result result = supplyStacks.move(input.stacks, input.movements, supplyStacks.moveUsingCrateMover9001(input.stacks));
 
-        assertEquals("MCD", result.result);
+        assertEquals("MCD", result.cratesOnTop);
     }
 
 }

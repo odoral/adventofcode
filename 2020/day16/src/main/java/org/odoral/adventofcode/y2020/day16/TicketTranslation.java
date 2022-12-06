@@ -1,6 +1,7 @@
 package org.odoral.adventofcode.y2020.day16;
 
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 
 import java.io.IOException;
 import java.util.*;
@@ -112,7 +113,7 @@ public class TicketTranslation {
                         .keySet()
                         .stream()
                         .findFirst()
-                        .orElseThrow(() -> new RuntimeException("WTF!"));
+                        .orElseThrow(() -> new AdventOfCodeException("WTF!"));
                     numberOfPassingRulesPerTicketPosition.entrySet()
                         .stream()
                         .filter(e1 -> !e1.getKey().equals(currentPosition))

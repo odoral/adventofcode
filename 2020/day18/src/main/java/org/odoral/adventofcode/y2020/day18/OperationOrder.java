@@ -115,10 +115,10 @@ public class OperationOrder {
         SUM('+'),
         MULT('*');
 
-        private final Character operation;
+        private final Character symbol;
 
-        Operation(Character operation) {
-            this.operation = operation;
+        Operation(Character symbol) {
+            this.symbol = symbol;
         }
 
         public static boolean isOperation(char c) {

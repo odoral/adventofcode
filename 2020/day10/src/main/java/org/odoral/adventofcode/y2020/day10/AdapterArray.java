@@ -48,7 +48,7 @@ public class AdapterArray {
     }
 
     public long calculateFirstSolution(Map<Integer, Integer> joltDiffCounter) {
-        return new Long(joltDiffCounter.get(1)) * new Long(joltDiffCounter.get(3));
+        return Long.valueOf(joltDiffCounter.get(1)) * Long.valueOf(joltDiffCounter.get(3));
     }
 
     public long calculateArrangements(List<Integer> adapters, int initialJoltage, int finalJoltageHigher) {

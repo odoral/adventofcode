@@ -2,6 +2,7 @@ package org.odoral.adventofcode.y2022.day5;
 
 import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,11 +23,11 @@ public class SupplyStacks {
         SupplyStacks supplyStacks = new SupplyStacks();
         Input input = supplyStacks.loadInput("/input.txt");
         Result result = supplyStacks.move(input.stacks, input.movements, supplyStacks.moveUsingCrateMover9000(input.stacks));
-        log.info("Crates on top: {}", result.result);
+        log.info("Crates on top using crate mover 9000: {}", result.cratesOnTop);
 
         input = supplyStacks.loadInput("/input.txt");
         result = supplyStacks.move(input.stacks, input.movements, supplyStacks.moveUsingCrateMover9001(input.stacks));
-        log.info("Total overlapped ranges: {}", result.result);
+        log.info("Crates on top using crate mover 9001: {}", result.cratesOnTop);
     }
 
     protected Input loadInput(String input) {
@@ -47,7 +48,7 @@ public class SupplyStacks {
                     }
                 });
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AdventOfCodeException(e);
         }
 
         for (int rowIndex = mappedStacks.size() - 1; rowIndex >= 0; rowIndex--) {
@@ -150,10 +151,10 @@ public class SupplyStacks {
 
     public static class Result {
 
-        final String result;
+        final String cratesOnTop;
 
-        public Result(String result) {
-            this.result = result;
+        public Result(String cratesOnTop) {
+            this.cratesOnTop = cratesOnTop;
         }
 
     }

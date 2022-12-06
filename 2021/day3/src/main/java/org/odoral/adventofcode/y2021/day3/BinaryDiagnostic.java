@@ -1,7 +1,7 @@
 package org.odoral.adventofcode.y2021.day3;
 
-import lombok.extern.slf4j.Slf4j;
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BinaryDiagnostic {
@@ -33,7 +35,7 @@ public class BinaryDiagnostic {
                         a1[i] += a2[i];
                     }
                     return a1;
-                }).orElseThrow(() -> new RuntimeException("No reduced report"));
+                }).orElseThrow(() -> new AdventOfCodeException("No reduced report"));
 
         Long gammaRate = CommonUtils.fromBinary(Arrays.stream(reducedReport)
                 .map(num -> num > diagnosticReport.size() / 2 ? "1" : "0")

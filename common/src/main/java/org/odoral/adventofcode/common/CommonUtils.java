@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 
 public class CommonUtils {
 
+    private CommonUtils() {}
+
     public static <T> List<T> loadResource(String resource, Function<String, T> mapFunction) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resource.getClass().getResourceAsStream(resource))))) {
             return bufferedReader.lines()
