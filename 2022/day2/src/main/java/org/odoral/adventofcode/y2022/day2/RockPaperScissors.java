@@ -1,6 +1,7 @@
 package org.odoral.adventofcode.y2022.day2;
 
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,8 +50,10 @@ public class RockPaperScissors {
                 case "C":
                 case "Z":
                     return SCISSORS;
+                default:
+                    throw new AdventOfCodeException("Unsupported option: " + option);
+
             }
-            throw new RuntimeException("Unsupported option: " + option);
         }
     }
 
@@ -108,6 +111,8 @@ public class RockPaperScissors {
                 totalScore += LOSE_RESULT;
                 totalScore += getOptionToLose(round.opponent).getPoints();
                 break;
+            default:
+                throw new AdventOfCodeException("Unsupported option: " + round.me);
         }
 
         return totalScore;

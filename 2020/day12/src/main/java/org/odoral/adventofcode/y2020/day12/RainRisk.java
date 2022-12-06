@@ -11,35 +11,38 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RainRisk {
 
-    public enum Facing{
+    public static final String UNSUPPORTED_CHAR_FOR_NAVIGATION_INSTRUCTION = "Unsupported char %s for navigation instruction.";
+    public static final String UNSUPPORTED_CHAR_FOR_FACING = "Unsupported char %s for Facing.";
+
+    public enum Facing {
         N(0, 1),
         E(1, 0),
         S(0, -1),
         W(-1, 0);
 
         public final int xMov;
-
         public final int yMov;
+
         Facing(int xMov, int yMov) {
             this.xMov = xMov;
             this.yMov = yMov;
         }
 
-        public Facing turn(char turn, int rotationDegrees){
+        public Facing turn(char turn, int rotationDegrees) {
             Facing[] directions = Facing.values();
             int position = Arrays.binarySearch(directions, this);
             int rotationDirection = turn == 'R' ? 1 : -1;
             int rotation = (rotationDirection * rotationDegrees / 90) % 4;
             int finalPosition = (position + rotation) % 4;
-            if(finalPosition < 0){
+            if (finalPosition < 0) {
                 return directions[directions.length + finalPosition];
-            }else{
+            } else {
                 return directions[finalPosition];
             }
         }
 
-        public static Facing fromChar(char facingCode){
-            switch (facingCode){
+        public static Facing fromChar(char facingCode) {
+            switch (facingCode) {
                 case 'N':
                     return N;
                 case 'S':
@@ -49,11 +52,12 @@ public class RainRisk {
                 case 'W':
                     return W;
                 default:
-                    throw new UnsupportedOperationException("Unsupported char "+facingCode+" for Facing.");
+                    throw new UnsupportedOperationException(String.format(UNSUPPORTED_CHAR_FOR_FACING, facingCode));
             }
         }
 
     }
+
     public static void main(String[] args) throws IOException {
         RainRisk rainRisk = new RainRisk();
         List<NavigationInstruction> navigationInstructions = rainRisk.loadNavigationInstructions("/input.txt");
@@ -68,10 +72,10 @@ public class RainRisk {
     }
 
     public int[] moveForPartOne(int[] origin, Facing facing, List<NavigationInstruction> navigationInstructions) {
-        int[] currentPosition = new int[] {origin[0], origin[1]};
+        int[] currentPosition = new int[]{origin[0], origin[1]};
         Facing currentFacing = facing;
         for (NavigationInstruction navigationInstruction : navigationInstructions) {
-            switch (navigationInstruction.instruction){
+            switch (navigationInstruction.instruction) {
                 case 'N':
                 case 'S':
                 case 'E':
@@ -89,17 +93,17 @@ public class RainRisk {
                     currentPosition[1] = currentPosition[1] + currentFacing.yMov * navigationInstruction.value;
                     break;
                 default:
-                    throw new UnsupportedOperationException("Unsupported char "+navigationInstruction.instruction+" for navigation instruction.");
+                    throw new UnsupportedOperationException(String.format(UNSUPPORTED_CHAR_FOR_NAVIGATION_INSTRUCTION, navigationInstruction.instruction));
             }
         }
         return currentPosition;
     }
 
     public int[] moveForPartTwo(int[] origin, int[] initialWaypoint, List<NavigationInstruction> navigationInstructions) {
-        int[] currentPosition = new int[] {origin[0], origin[1]};
-        int[] currentWaypoint = new int[] {initialWaypoint[0], initialWaypoint[1]};
+        int[] currentPosition = new int[]{origin[0], origin[1]};
+        int[] currentWaypoint = new int[]{initialWaypoint[0], initialWaypoint[1]};
         for (NavigationInstruction navigationInstruction : navigationInstructions) {
-            switch (navigationInstruction.instruction){
+            switch (navigationInstruction.instruction) {
                 case 'N':
                 case 'S':
                 case 'E':
@@ -119,7 +123,7 @@ public class RainRisk {
                     currentPosition[1] = currentPosition[1] + currentWaypoint[1] * navigationInstruction.value;
                     break;
                 default:
-                    throw new UnsupportedOperationException("Unsupported char "+navigationInstruction.instruction+" for navigation instruction.");
+                    throw new UnsupportedOperationException(String.format(UNSUPPORTED_CHAR_FOR_NAVIGATION_INSTRUCTION, navigationInstruction.instruction));
             }
         }
         return currentPosition;
@@ -127,16 +131,16 @@ public class RainRisk {
 
     protected int[] rotateWaypoint(int[] currentWaypoint, int rotation) {
         int[] result = new int[]{currentWaypoint[0], currentWaypoint[1]};
-        if(rotation % 360 != 0){
+        if (rotation % 360 != 0) {
             int rotations = Math.abs(rotation / 90);
             int[] r;
-            if(rotation > 0) {
+            if (rotation > 0) {
                 r = new int[]{-1, 1};
-            }else{
+            } else {
                 r = new int[]{1, -1};
             }
             for (int i = 0; i < rotations; i++) {
-                result = new int[]{result[1]*=r[0], result[0]*=r[1]};
+                result = new int[]{result[1] *= r[0], result[0] *= r[1]};
             }
         }
         return result;
@@ -147,6 +151,7 @@ public class RainRisk {
             .map(Math::abs)
             .sum();
     }
+
     public static class NavigationInstruction {
 
         final char instruction;
@@ -157,8 +162,8 @@ public class RainRisk {
             this.value = value;
         }
 
-        public static NavigationInstruction from(String code){
-            return new NavigationInstruction(code.charAt(0), 
+        public static NavigationInstruction from(String code) {
+            return new NavigationInstruction(code.charAt(0),
                 Integer.parseInt(code.substring(1)));
         }
     }

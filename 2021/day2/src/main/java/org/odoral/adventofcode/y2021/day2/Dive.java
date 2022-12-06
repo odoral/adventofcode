@@ -1,11 +1,13 @@
 package org.odoral.adventofcode.y2021.day2;
 
-import lombok.extern.slf4j.Slf4j;
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Dive {
@@ -36,6 +38,8 @@ public class Dive {
                 case "up":
                     currentPosition.move(0, -offset);
                     break;
+                default:
+                    throw new AdventOfCodeException("Unsupported move: " + fields[0]);
             }
         });
 
@@ -58,6 +62,8 @@ public class Dive {
                 case "up":
                     currentPosition.aim(-offset);
                     break;
+                default:
+                    throw new AdventOfCodeException("Unsupported move: " + fields[0]);
             }
         });
 

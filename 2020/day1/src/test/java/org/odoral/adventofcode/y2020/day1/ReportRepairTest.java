@@ -7,7 +7,7 @@ import org.odoral.adventofcode.common.CommonUtils;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ReportRepairTest {
 
@@ -19,11 +19,11 @@ public class ReportRepairTest {
     
     @Test public void test_twoNumbers() throws IOException {
         List<Integer> numbers = CommonUtils.loadResource("/scenario1.txt", Integer::parseInt);
-        List<ReportRepair.Result> numbersWhichSum = reportRepair.getTwoNumbersWhichSum(numbers, ReportRepair._2020);
+        List<ReportRepair.Result> numbersWhichSum = reportRepair.getTwoNumbersWhichSum(numbers, ReportRepair.NUMBER_2020);
         assertEquals(1, numbersWhichSum.size());
         ReportRepair.Result result = numbersWhichSum.get(0);
         assertEquals(2, result.getStream().count());
-        assertEquals(ReportRepair._2020, result.getStream().mapToInt(i -> i).sum());
+        assertEquals(ReportRepair.NUMBER_2020, result.getStream().mapToInt(i -> i).sum());
         assertEquals(new Integer(1721), result.numbers[0]);
         assertEquals(new Integer(299), result.numbers[1]);
         assertEquals(514579, result.getStream()
@@ -34,11 +34,11 @@ public class ReportRepairTest {
     
     @Test public void test_threeNumbers() throws IOException {
         List<Integer> numbers = CommonUtils.loadResource("/scenario1.txt", Integer::parseInt);
-        List<ReportRepair.Result> numbersWhichSum = reportRepair.getThreeNumbersWhichSum(numbers, ReportRepair._2020);
+        List<ReportRepair.Result> numbersWhichSum = reportRepair.getThreeNumbersWhichSum(numbers, ReportRepair.NUMBER_2020);
         assertEquals(1, numbersWhichSum.size());
         ReportRepair.Result result = numbersWhichSum.get(0);
         assertEquals(3, result.getStream().count());
-        assertEquals(ReportRepair._2020, result.getStream().mapToInt(i -> i).sum());
+        assertEquals(ReportRepair.NUMBER_2020, result.getStream().mapToInt(i -> i).sum());
         assertEquals(new Integer(979), result.numbers[0]);
         assertEquals(new Integer(366), result.numbers[1]);
         assertEquals(new Integer(675), result.numbers[2]);
