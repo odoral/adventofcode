@@ -108,7 +108,7 @@ public class ConwayCubes {
                 conwayCube = spaceCube;
             }
             long activatedNeighbours = conwayCube.activatedNeighbours(space);
-            if(conwayCube.getCubeStatus()){
+            if(conwayCube.isActive()){
                 if(activatedNeighbours >= 2 && activatedNeighbours <= 3){
                     resultingSpace.put(conwayCube, conwayCube);
                 }
@@ -123,7 +123,7 @@ public class ConwayCubes {
     public long countActivated(Map<? extends ConwayCube, ? extends ConwayCube> space) {
         return space.keySet()
             .stream()
-            .filter(ConwayCube::getCubeStatus)
+            .filter(ConwayCube::isActive)
             .count();
     }
     

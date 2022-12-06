@@ -86,12 +86,12 @@ public class OperationOrder {
     }
 
     protected String processIsolatedSumOperations(String operation) {
-        Pattern compile = Pattern.compile("(?<Sum>([0-9]+\\+)*[0-9]+)");
+        Pattern compile = Pattern.compile("(?<Sum>(\\d+\\+)*\\d+)");
         return processPatternOperations(operation, compile);
     }
 
     protected String processIsolatedMultOperations(String operation) {
-        Pattern compile = Pattern.compile("\\((([0-9]+\\*)*[0-9]+)\\)");
+        Pattern compile = Pattern.compile("\\(((\\d+\\*)*\\d+)\\)");
         return processPatternOperations(operation, compile);
     }
 

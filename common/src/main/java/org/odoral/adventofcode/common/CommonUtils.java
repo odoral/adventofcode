@@ -47,7 +47,7 @@ public class CommonUtils {
 
     public static long lcm(List<Integer> rates) {
         return rates.stream()
-            .map(Long::new)
+            .map(Long::valueOf)
             .reduce(1L, CommonUtils::lcm);
     }
 

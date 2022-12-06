@@ -10,13 +10,13 @@ public interface ConwayCube {
 
     <T extends ConwayCube> T activated();
     
-    Boolean getCubeStatus();
+    boolean isActive();
     
     default long activatedNeighbours(Map<? extends ConwayCube, ? extends ConwayCube> space){
         return neighbours().stream()
             .map(space::get)
             .filter(Objects::nonNull)
-            .filter(ConwayCube::getCubeStatus)
+            .filter(ConwayCube::isActive)
             .count();
     }
 

@@ -22,7 +22,7 @@ public class ConwayCube3D implements ConwayCube {
     @EqualsAndHashCode.Include final int x;
     @EqualsAndHashCode.Include final int y;
     @EqualsAndHashCode.Include final int z;
-    final Boolean cubeStatus;
+    final boolean active;
 
     public List<ConwayCube3D> neighbours() {
         return IntStream.rangeClosed(x - 1, x + 1)
@@ -68,7 +68,7 @@ public class ConwayCube3D implements ConwayCube {
         return IntStream.rangeClosed(zMin, zMax)
             .mapToObj(z -> IntStream.rangeClosed(yMin, yMax)
                 .mapToObj(y -> IntStream.rangeClosed(xMin, xMax)
-                    .mapToObj(x -> space.getOrDefault(new ConwayCube3D(x, y, z, false), new ConwayCube3D(x, y, z, false)).getCubeStatus() ? "#" : ".")
+                    .mapToObj(x -> space.getOrDefault(new ConwayCube3D(x, y, z, false), new ConwayCube3D(x, y, z, false)).isActive() ? "#" : ".")
                     .reduce("", String::concat))
                 .collect(Collectors.joining("\n")))
             .collect(Collectors.joining("\n------------------------------\n"));

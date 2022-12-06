@@ -20,7 +20,7 @@ public class ConwayCube4D implements ConwayCube {
     @EqualsAndHashCode.Include final int y;
     @EqualsAndHashCode.Include final int z;
     @EqualsAndHashCode.Include final int w;
-    final Boolean cubeStatus;
+    final boolean active;
 
     public List<ConwayCube4D> neighbours() {
         return IntStream.rangeClosed(x - 1, x + 1)
