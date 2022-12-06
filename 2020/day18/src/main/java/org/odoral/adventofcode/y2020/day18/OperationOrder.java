@@ -38,8 +38,8 @@ public class OperationOrder {
         Operation currentOperation = Operation.SUM;
         char[] chars = operation.toCharArray();
         StringBuilder accNumber = new StringBuilder();
-        for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
+        for (int operationIndex = 0; operationIndex < chars.length; operationIndex++) {
+            char c = chars[operationIndex];
             if (Operation.isOperation(c)) {
                 if (!accNumber.toString().isEmpty()) {
                     total = currentOperation.doOperation(total, Integer.parseInt(accNumber.toString()));
@@ -47,11 +47,11 @@ public class OperationOrder {
                 }
                 currentOperation = Operation.from(c);
             } else if (c == '(') {
-                String subOperation = extractSubOperation(operation, i);
-                i += subOperation.length() + 1;
+                String subOperation = extractSubOperation(operation, operationIndex);
+                operationIndex += subOperation.length() + 1;
                 long subtotal = processOperationPart1(subOperation);
                 total = currentOperation.doOperation(total, subtotal);
-            } else if (i == chars.length - 1) {
+            } else if (operationIndex == chars.length - 1) {
                 accNumber.append(c);
                 total = currentOperation.doOperation(total, Integer.parseInt(accNumber.toString()));
             } else {

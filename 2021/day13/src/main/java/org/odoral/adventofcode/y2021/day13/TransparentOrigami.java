@@ -1,6 +1,5 @@
 package org.odoral.adventofcode.y2021.day13;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.CommonUtils;
 import org.odoral.adventofcode.common.model.Point;
@@ -8,6 +7,8 @@ import org.odoral.adventofcode.common.model.Point;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TransparentOrigami {
@@ -162,19 +163,19 @@ public class TransparentOrigami {
         }
 
         public static class Fold {
-            public enum Along{
+            public enum Along {
                 VERTICAL,
                 HORIZONTAL
             }
 
-            public Along along;
-            public int position;
+            Along along;
+            int position;
 
-            boolean isHorizontalFold(){
+            boolean isHorizontalFold() {
                 return Along.HORIZONTAL.equals(along);
             }
 
-            boolean isVerticalFold(){
+            boolean isVerticalFold() {
                 return Along.VERTICAL.equals(along);
             }
 

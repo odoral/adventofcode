@@ -1,6 +1,7 @@
 package org.odoral.adventofcode.y2021.day10;
 
-import lombok.extern.slf4j.Slf4j;
+import com.google.common.collect.ImmutableList;
+
 import org.odoral.adventofcode.common.CommonUtils;
 
 import java.io.IOException;
@@ -10,11 +11,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class SyntaxScoring {
 
-    public static final List<Character> STARTING_CHARACTERS = Arrays.asList('(', '[', '{', '<');
-    public static final List<Character> ENDING_CHARACTERS = Arrays.asList(')', ']', '}', '>');
+    public static final List<Character> STARTING_CHARACTERS = ImmutableList.of('(', '[', '{', '<');
+    public static final List<Character> ENDING_CHARACTERS = ImmutableList.of(')', ']', '}', '>');
 
     public static void main(String[] args) throws IOException {
         SyntaxScoring syntaxScoring = new SyntaxScoring();

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,14 +32,14 @@ public class CampCleanup {
             .collect(Collectors.toList());
     }
 
-    protected Result getOverlappedRanges(List<List<Range>> ranges, BiFunction<Range, Range, Boolean> overlapFunction) {
+    protected Result getOverlappedRanges(List<List<Range>> ranges, BiPredicate<Range, Range> overlapFunction) {
         return new Result(ranges.stream()
             .map(assignations -> {
                 Range range1 = assignations.get(0);
                 Range range2 = assignations.get(1);
-                if (overlapFunction.apply(range1, range2)) {
+                if (overlapFunction.test(range1, range2)) {
                     return KeyValue.<Range, Range>builder().key(range1).value(range2).build();
-                } else if (overlapFunction.apply(range2, range1)) {
+                } else if (overlapFunction.test(range2, range1)) {
                     return KeyValue.<Range, Range>builder().key(range2).value(range1).build();
                 }
                 return null;
