@@ -6,6 +6,7 @@ import org.odoral.adventofcode.common.model.Point;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -106,6 +107,9 @@ public class HydrothermalVenture {
 
                 @Override
                 public Point next() {
+                    if (!hasNext()) {
+                        throw new NoSuchElementException();
+                    }
                     if (currentPoint == null) {
                         currentPoint = start;
                     } else {

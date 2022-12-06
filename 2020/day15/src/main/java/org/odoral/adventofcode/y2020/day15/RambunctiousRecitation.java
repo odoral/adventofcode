@@ -29,7 +29,7 @@ public class RambunctiousRecitation {
     }
 
     public long play(Map<Long, NumberStatus> startingNumbers, long turns, long lastNumber) {
-        long nextTurn = startingNumbers.size() + 1;
+        long nextTurn = startingNumbers.size() + 1L;
         for (long turn = nextTurn; turn <= turns; turn++) {
             NumberStatus numberStatus = startingNumbers.get(lastNumber);
             if(numberStatus.isNew){
