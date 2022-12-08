@@ -7,11 +7,14 @@ import org.odoral.adventofcode.common.model.ValuedPoint;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,16 @@ public class CommonUtils {
             return bufferedReader.lines()
                 .map(mapFunction)
                 .collect(Collectors.toList());
+        }
+    }
+
+    public static <T> T[][] loadMatrixResource(String resource, BiFunction<Integer, String, T[]> mapFunction, Class<T> clazz) throws IOException {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resource.getClass().getResourceAsStream(resource))))) {
+            AtomicInteger row = new AtomicInteger();
+            List<T[]> result = bufferedReader.lines()
+                .map(string -> mapFunction.apply(row.getAndIncrement(), string))
+                .collect(Collectors.toList());
+            return result.toArray((T[][]) Array.newInstance(clazz, result.size(), result.get(0).length));
         }
     }
 
@@ -116,5 +129,15 @@ public class CommonUtils {
             neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex + 1, map[rowIndex + 1][columnIndex + 1]));
         }
         return neighbours;
+    }
+
+    public static <T> T[] extractColumn(T[][] matrix, Class<T> clazz, int columnIndex) {
+        T[] result = (T[]) Array.newInstance(clazz, matrix.length);
+
+        for (int rowIndex = 0; rowIndex < matrix.length; rowIndex++) {
+            result[rowIndex] = matrix[rowIndex][columnIndex];
+        }
+
+        return result;
     }
 }
