@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class CommonUtils {
@@ -23,10 +24,14 @@ public class CommonUtils {
     private CommonUtils() {}
 
     public static <T> List<T> loadResource(String resource, Function<String, T> mapFunction) throws IOException {
+        return loadResource(resource, mapFunction, Collectors.toList());
+    }
+
+    public static <T, R> R loadResource(String resource, Function<String, T> mapFunction, Collector<T, ?, R> collector) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(resource.getClass().getResourceAsStream(resource))))) {
             return bufferedReader.lines()
                 .map(mapFunction)
-                .collect(Collectors.toList());
+                .collect(collector);
         }
     }
 
@@ -81,52 +86,60 @@ public class CommonUtils {
     }
 
     public static <T> List<ValuedPoint<T>> findNeighbours(T[][] map, int rowIndex, int columnIndex, boolean considerDiagonal) {
-        List<ValuedPoint<T>> neighbours = new ArrayList<>();
+        return findNeighbours(map, rowIndex, columnIndex, considerDiagonal, Function.identity());
+    }
+
+    public static <T, R> List<R> findNeighbours(T[][] map, int rowIndex, int columnIndex, boolean considerDiagonal, Function<ValuedPoint<T>, R> mapFunction) {
+        List<R> neighbours = new ArrayList<>();
 
         // Up
         if (rowIndex > 0) {
-            neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex, map[rowIndex - 1][columnIndex]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex - 1, columnIndex, map[rowIndex - 1][columnIndex])));
         }
         // Down
         if (rowIndex < map.length - 1) {
-            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex, map[rowIndex + 1][columnIndex]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex + 1, columnIndex, map[rowIndex + 1][columnIndex])));
         }
         // Left
         if (columnIndex > 0) {
-            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex - 1, map[rowIndex][columnIndex - 1]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex, columnIndex - 1, map[rowIndex][columnIndex - 1])));
         }
         // Right
         if (columnIndex < map[rowIndex].length - 1) {
-            neighbours.add(new ValuedPoint<>(rowIndex, columnIndex + 1, map[rowIndex][columnIndex + 1]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex, columnIndex + 1, map[rowIndex][columnIndex + 1])));
         }
 
         if (considerDiagonal) {
-            neighbours.addAll(findDiagonalNeighbours(map, rowIndex, columnIndex));
+            neighbours.addAll(findDiagonalNeighbours(map, rowIndex, columnIndex, mapFunction));
         }
 
         return neighbours;
     }
 
     public static <T> List<ValuedPoint<T>> findDiagonalNeighbours(T[][] map, int rowIndex, int columnIndex) {
-        List<ValuedPoint<T>> neighbours = new ArrayList<>();
+        return findDiagonalNeighbours(map, rowIndex, columnIndex, Function.identity());
+    }
+
+    public static <T, R> List<R> findDiagonalNeighbours(T[][] map, int rowIndex, int columnIndex, Function<ValuedPoint<T>, R> mapFunction) {
+        List<R> neighbours = new ArrayList<>();
         // Top left corner
         if (rowIndex > 0 && columnIndex > 0) {
-            neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex - 1, map[rowIndex - 1][columnIndex - 1]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex - 1, columnIndex - 1, map[rowIndex - 1][columnIndex - 1])));
         }
 
         // Top right corner
         if (rowIndex > 0 && columnIndex < map[rowIndex].length - 1) {
-            neighbours.add(new ValuedPoint<>(rowIndex - 1, columnIndex + 1, map[rowIndex - 1][columnIndex + 1]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex - 1, columnIndex + 1, map[rowIndex - 1][columnIndex + 1])));
         }
 
         // Bottom left corner
         if (rowIndex < map.length - 1 && columnIndex > 0) {
-            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex - 1, map[rowIndex + 1][columnIndex - 1]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex + 1, columnIndex - 1, map[rowIndex + 1][columnIndex - 1])));
         }
 
         // Bottom right corner
         if (rowIndex < map.length - 1 && columnIndex < map[rowIndex].length - 1) {
-            neighbours.add(new ValuedPoint<>(rowIndex + 1, columnIndex + 1, map[rowIndex + 1][columnIndex + 1]));
+            neighbours.add(mapFunction.apply(new ValuedPoint<>(rowIndex + 1, columnIndex + 1, map[rowIndex + 1][columnIndex + 1])));
         }
         return neighbours;
     }
