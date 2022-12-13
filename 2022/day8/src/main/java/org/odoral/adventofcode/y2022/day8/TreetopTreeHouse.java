@@ -73,7 +73,7 @@ public class TreetopTreeHouse {
             AtomicInteger yPos = new AtomicInteger();
 
             return Arrays.stream(CommonUtils.toIntegerArray(content))
-                .map(value -> new ValuedPoint(xPos, yPos.getAndIncrement(), value))
+                .map(value -> new ValuedPoint<>(xPos, yPos.getAndIncrement(), value))
                 .toArray(ValuedPoint[]::new);
         }, ValuedPoint.class);
     }
