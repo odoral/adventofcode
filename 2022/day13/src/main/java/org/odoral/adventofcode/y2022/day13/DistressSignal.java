@@ -2,6 +2,7 @@ package org.odoral.adventofcode.y2022.day13;
 
 import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 import org.odoral.adventofcode.common.model.KeyValue;
 import org.odoral.adventofcode.common.model.MutableKeyValue;
 
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@SuppressWarnings("java:S3740")
 public class DistressSignal {
 
     public static void main(String[] args) throws IOException {
@@ -136,7 +138,7 @@ public class DistressSignal {
         public static List parseLine(String line) {
             List currentList = null;
             List mainList = null;
-            Stack<List> lists = new Stack<>();
+            Deque<List> lists = new ArrayDeque<>();
             StringBuilder number = new StringBuilder();
             for (int lineIndex = 0; lineIndex < line.length(); lineIndex++) {
                 char character = line.charAt(lineIndex);
@@ -146,7 +148,8 @@ public class DistressSignal {
                         if (currentList != null) {
                             currentList.add(newList);
                         }
-                        lists.add((currentList = newList));
+                        currentList = newList;
+                        lists.add(newList);
                         if (mainList == null) {
                             mainList = currentList;
                         }
@@ -173,7 +176,9 @@ public class DistressSignal {
 
         public static StringBuilder accumulateNumber(StringBuilder number, List currentList) {
             if (number.length() > 0) {
-                currentList.add(Integer.valueOf(number.toString()));
+                Optional.ofNullable(currentList)
+                    .orElseThrow(() -> new AdventOfCodeException(""))
+                    .add(Integer.valueOf(number.toString()));
                 number = new StringBuilder();
             }
             return number;

@@ -2,6 +2,7 @@ package org.odoral.adventofcode.y2022.day17;
 
 import org.apache.commons.lang3.StringUtils;
 import org.odoral.adventofcode.common.CommonUtils;
+import org.odoral.adventofcode.common.exception.AdventOfCodeException;
 import org.odoral.adventofcode.common.model.Point;
 
 import java.io.IOException;
@@ -9,7 +10,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -39,34 +42,22 @@ public class PyroclasticFlow {
         LinkedList<String> verticalChamber = new LinkedList<>();
         List<Integer> rockCycleHeights = new ArrayList<>();
         int rockCount = 0;
-        int jetCount = 0;
-        Point rockPosition;
+        AtomicInteger jetCount = new AtomicInteger();
+        Point rockFallPosition;
         while (rockCount < totalRockCount) {
             Rock rock = rocks.get(rockCount % rocks.size());
-            rockPosition = new Point(ROCK_LEFT_EDGE, getVerticalChamberHeight(verticalChamber) + ROCK_BOTTOM_EDGE + rock.shape.length - 1);
 
-            boolean overlap = false;
-            while (!overlap) {
-                Function<Point, Point> movement = getNextJetMovement(jetPattern, jetCount++);
-                Point jetMovement = movement.apply(rockPosition);
-                if (!overlaps(verticalChamber, rock, jetMovement)) {
-                    rockPosition = jetMovement;
-                }
-                Point fallMovement = rockPosition.moveDown();
-                if (!(overlap = overlaps(verticalChamber, rock, fallMovement))) {
-                    rockPosition = fallMovement;
-                }
-            }
-
-            addRock(verticalChamber, rockPosition, rock);
+            rockFallPosition = doRockFall(rock, jetPattern, jetCount, verticalChamber);
+            addRock(verticalChamber, rockFallPosition, rock);
             rockCount++;
-            rockCycleHeights.add(rockCycleHeights.size() > 0 ?
-                getVerticalChamberHeight(verticalChamber) - rockCycleHeights.stream().mapToInt(i -> i).sum() :
-                getVerticalChamberHeight(verticalChamber));
+
+            rockCycleHeights.add(rockCycleHeights.isEmpty() ?
+                getVerticalChamberHeight(verticalChamber) :
+                getVerticalChamberHeight(verticalChamber) - rockCycleHeights.stream().mapToInt(i -> i).sum());
 
             if (rockCount % rocks.size() == 0) {
-                Optional<Integer[]> pattern;
-                if ((pattern = lookForPattern(rockCycleHeights)).isPresent()) {
+                Optional<Integer[]> pattern = lookForPattern(rockCycleHeights);
+                if (pattern.isPresent()) {
                     int preamble = pattern.get()[0];
                     int rockCountPattern = pattern.get()[1];
                     int preambleHeight = pattern.get()[2];
@@ -89,6 +80,26 @@ public class PyroclasticFlow {
         log.info("Chamber after {} rocks", rockCount);
         printChamber(verticalChamber);
         return getVerticalChamberHeight(verticalChamber);
+    }
+
+    protected Point doRockFall(Rock rock, List<Character> jetPattern, AtomicInteger jetCount, LinkedList<String> verticalChamber) {
+        Point rockPosition;
+        rockPosition = new Point(ROCK_LEFT_EDGE, getVerticalChamberHeight(verticalChamber) + ROCK_BOTTOM_EDGE + rock.shape.length - 1);
+
+        boolean overlap = false;
+        while (!overlap) {
+            UnaryOperator<Point> movement = getNextJetMovement(jetPattern, jetCount.getAndIncrement());
+            Point jetMovement = movement.apply(rockPosition);
+            if (!overlaps(verticalChamber, rock, jetMovement)) {
+                rockPosition = jetMovement;
+            }
+            Point fallMovement = rockPosition.moveDown();
+            overlap = overlaps(verticalChamber, rock, fallMovement);
+            if (!overlap) {
+                rockPosition = fallMovement;
+            }
+        }
+        return rockPosition;
     }
 
     protected Optional<Integer[]> lookForPattern(List<Integer> rockCycleHeights) {
@@ -127,9 +138,9 @@ public class PyroclasticFlow {
         return true;
     }
 
-    protected Function<Point, Point> getNextJetMovement(List<Character> jetPattern, int jetCount) {
+    protected UnaryOperator<Point> getNextJetMovement(List<Character> jetPattern, int jetCount) {
         char jet = jetPattern.get(jetCount % jetPattern.size());
-        Function<Point, Point> movement = Function.identity();
+        UnaryOperator<Point> movement;
         switch (jet) {
             case '<':
                 movement = Point::moveLeft;
@@ -137,6 +148,8 @@ public class PyroclasticFlow {
             case '>':
                 movement = Point::moveRight;
                 break;
+            default:
+                throw new AdventOfCodeException("Unsupported jet movement: " + jet);
         }
         return movement;
     }
@@ -145,24 +158,31 @@ public class PyroclasticFlow {
         for (int y = 0; y < rock.shape.length; y++) {
             for (int x = 0; x < rock.shape[y].length; x++) {
                 Character rockContent = rock.shape[y][x];
-                if (rockContent.equals(ROCK)) {
-                    Point chamberPoint = new Point(rockPosition.x + x, rockPosition.y - y);
-
-                    if (chamberPoint.x < 0 || chamberPoint.x >= VERTICAL_CHAMBER_WIDTH) {
-                        return true;
-                    }
-
-                    if (chamberPoint.y < 0) {
-                        return true;
-                    }
-
-                    if (chamberPoint.y < verticalChamber.size() && verticalChamber.get(chamberPoint.y).charAt(chamberPoint.x) == ROCK) {
-                        return true;
-                    }
+                if (rockContentOverlaps(verticalChamber, rockPosition, x, y, rockContent)) {
+                    return true;
                 }
             }
         }
 
+        return false;
+    }
+
+    protected boolean rockContentOverlaps(List<String> verticalChamber, Point rockPosition, int rockShapeX, int rockShapeY, Character rockContent) {
+        if (rockContent.equals(ROCK)) {
+            Point chamberPoint = new Point(rockPosition.x + rockShapeX, rockPosition.y - rockShapeY);
+
+            if (chamberPoint.x < 0 || chamberPoint.x >= VERTICAL_CHAMBER_WIDTH) {
+                return true;
+            }
+
+            if (chamberPoint.y < 0) {
+                return true;
+            }
+
+            if (chamberPoint.y < verticalChamber.size() && verticalChamber.get(chamberPoint.y).charAt(chamberPoint.x) == ROCK) {
+                return true;
+            }
+        }
         return false;
     }
 
