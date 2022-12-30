@@ -73,6 +73,7 @@ dependencies {
     jacocoAggregation project(':2022:day18')
     
     jacocoAggregation project(':2022:day20')
+    jacocoAggregation project(':2022:day21')
 }
 
 reporting {
