@@ -59,4 +59,6 @@ include '2022:day15'
 include '2022:day17'
 include '2022:day18'
 
+include '2022:day20'
+
 include 'code-coverage-report'
