@@ -23,9 +23,9 @@ public class RegolithReservoir {
 
     public static final char ROCK = '#';
     public static final List<UnaryOperator<Point>> DISPLACEMENTS = ImmutableList.of(
-        Point::moveUp,
-        p -> p.moveUp().moveLeft(),
-        p -> p.moveUp().moveRight()
+        Point::increaseY,
+        p -> p.increaseY().decreaseX(),
+        p -> p.increaseY().increaseX()
     );
     public static final Point SAND_START_POINT = new Point(500, 0);
 
@@ -137,15 +137,15 @@ public class RegolithReservoir {
         public static UnaryOperator<Point> calculateDisplacement(Point init, Point end) {
             if (init.x == end.x) {
                 if (init.y > end.y) {
-                    return Point::moveDown;
+                    return Point::decreaseY;
                 } else {
-                    return Point::moveUp;
+                    return Point::increaseY;
                 }
             } else if (init.y == end.y) {
                 if (init.x > end.x) {
-                    return Point::moveLeft;
+                    return Point::decreaseX;
                 } else {
-                    return Point::moveRight;
+                    return Point::increaseX;
                 }
             } else {
                 throw new AdventOfCodeException("Invalid init:" + init + " and end:" + end);

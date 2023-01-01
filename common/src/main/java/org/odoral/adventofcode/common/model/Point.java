@@ -1,14 +1,41 @@
 package org.odoral.adventofcode.common.model;
 
 import java.util.Objects;
+import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 public class Point {
+
+    public static final UnaryOperator<Point> INCREASE_Y = Point::increaseY;
+    public static final UnaryOperator<Point> DECREASE_Y = Point::decreaseY;
+    public static final UnaryOperator<Point> INCREASE_X = Point::increaseX;
+    public static final UnaryOperator<Point> DECREASE_X = Point::decreaseX;
+
+    public static final BinaryOperator<Point> ROTATE_HALF_PI = (point, axis) -> new Point(
+        axis.x - (point.y - axis.y),
+        axis.y + (point.x - axis.x)
+    );
+
+    public static final BinaryOperator<Point> ROTATE_PI = (point, axis) -> ROTATE_HALF_PI.apply(ROTATE_HALF_PI.apply(point, axis), axis);
+    public static final BinaryOperator<Point> ROTATE_THREE_HALF_PI = (point, axis) -> ROTATE_PI.apply(ROTATE_HALF_PI.apply(point, axis), axis);
+    
+
+    public static final BinaryOperator<Point> TRANSLATE = (point, distance) -> new Point(point.x + distance.x, point.y + distance.y);
+
     public final int x;
     public final int y;
 
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     @Override
@@ -33,19 +60,19 @@ public class Point {
         return sb.toString();
     }
 
-    public Point moveUp() {
+    public Point increaseY() {
         return new Point(x, y + 1);
     }
 
-    public Point moveDown() {
+    public Point decreaseY() {
         return new Point(x, y - 1);
     }
 
-    public Point moveRight() {
+    public Point increaseX() {
         return new Point(x + 1, y);
     }
 
-    public Point moveLeft() {
+    public Point decreaseX() {
         return new Point(x - 1, y);
     }
 

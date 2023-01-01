@@ -93,7 +93,7 @@ public class PyroclasticFlow {
             if (!overlaps(verticalChamber, rock, jetMovement)) {
                 rockPosition = jetMovement;
             }
-            Point fallMovement = rockPosition.moveDown();
+            Point fallMovement = rockPosition.decreaseY();
             overlap = overlaps(verticalChamber, rock, fallMovement);
             if (!overlap) {
                 rockPosition = fallMovement;
@@ -143,10 +143,10 @@ public class PyroclasticFlow {
         UnaryOperator<Point> movement;
         switch (jet) {
             case '<':
-                movement = Point::moveLeft;
+                movement = Point::decreaseX;
                 break;
             case '>':
-                movement = Point::moveRight;
+                movement = Point::increaseX;
                 break;
             default:
                 throw new AdventOfCodeException("Unsupported jet movement: " + jet);

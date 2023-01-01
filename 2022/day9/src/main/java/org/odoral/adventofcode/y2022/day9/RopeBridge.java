@@ -41,16 +41,16 @@ public class RopeBridge {
             Function<Point, Point> headMoveFunction = Function.identity();
             switch (where) {
                 case "U":
-                    headMoveFunction = Point::moveUp;
+                    headMoveFunction = Point::increaseY;
                     break;
                 case "D":
-                    headMoveFunction = Point::moveDown;
+                    headMoveFunction = Point::decreaseY;
                     break;
                 case "L":
-                    headMoveFunction = Point::moveLeft;
+                    headMoveFunction = Point::decreaseX;
                     break;
                 case "R":
-                    headMoveFunction = Point::moveRight;
+                    headMoveFunction = Point::increaseX;
                     break;
             }
 
@@ -90,16 +90,16 @@ public class RopeBridge {
         } else {
             if (knotAhead.x != currentKnot.x) {
                 if (knotAhead.x > currentKnot.x) {
-                    movement = movement.andThen(Point::moveRight);
+                    movement = movement.andThen(Point::increaseX);
                 } else {
-                    movement = movement.andThen(Point::moveLeft);
+                    movement = movement.andThen(Point::decreaseX);
                 }
             }
             if (knotAhead.y != currentKnot.y) {
                 if (knotAhead.y > currentKnot.y) {
-                    movement = movement.andThen(Point::moveUp);
+                    movement = movement.andThen(Point::increaseY);
                 } else {
-                    movement = movement.andThen(Point::moveDown);
+                    movement = movement.andThen(Point::decreaseY);
                 }
             }
         }
