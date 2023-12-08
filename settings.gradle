@@ -62,5 +62,6 @@ include '2023:day3'
 include '2023:day4'
 include '2023:day5'
 include '2023:day6'
+include '2023:day7'
 
 include 'code-coverage-report'
