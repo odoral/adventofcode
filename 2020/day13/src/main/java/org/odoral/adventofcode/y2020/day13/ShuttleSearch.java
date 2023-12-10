@@ -63,7 +63,7 @@ public class ShuttleSearch {
         
         Integer firstBusId = busIds[0];
         long currentTimeStamp = ((fromTimeStamp / firstBusId.longValue()) + 1) * firstBusId.longValue();
-        List<Integer> rates = new ArrayList<>();
+        List<Number> rates = new ArrayList<>();
         rates.add(firstBusId);
         long increment = CommonUtils.lcm(rates);
         for (int offset = 1; offset < busIds.length; offset++) {
