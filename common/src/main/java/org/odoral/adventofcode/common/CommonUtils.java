@@ -59,9 +59,9 @@ public class CommonUtils {
             .toArray(Integer[]::new);
     }
 
-    public static long lcm(List<Integer> rates) {
+    public static long lcm(List<Number> rates) {
         return rates.stream()
-            .map(Long::valueOf)
+            .map(Number::longValue)
             .reduce(1L, CommonUtils::lcm);
     }
 
